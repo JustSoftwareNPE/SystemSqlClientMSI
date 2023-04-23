@@ -6,6 +6,7 @@ using Azure.Identity;
 using Azure.Core;
 using System.Linq;
 using Hangfire.Annotations;
+using Microsoft.Practices.EnterpriseLibrary.Data;
 
 /* Copyright 2023 - Just Software
  * Use or distribution for other projects is not allowed 
@@ -45,7 +46,7 @@ namespace SQLManagedIdentityHelper
             AccessToken accessToken = new DefaultAzureCredential(
                 new DefaultAzureCredentialOptions
                 {
-//                    TenantId = #FIXME - ADD TenantID or remove to use defualt
+                    //                    TenantId = #FIXME - ADD TenantID or remove to use defualt
                 }
                 ).GetToken(
                 new TokenRequestContext(new string[] { "https://database.windows.net//.default" }));
@@ -75,15 +76,10 @@ namespace SQLManagedIdentityHelper
             var sqlconn = __instance as SqlConnection;
             if (sqlconn.AccessToken == null)
             {
-                var connStrBuilder = new SqlConnectionStringBuilder(connectionString);
+                // Only add access token if userid / password not present in connection string
+                var connStrBuilder = new SqlConnectionStringBuilder(sqlconn.ConnectionString);
                 if (string.IsNullOrWhiteSpace(connStrBuilder.Password) && string.IsNullOrWhiteSpace(connStrBuilder.UserID))
-                sqlconn.AccessToken = GetAccessToken();
-                Console.WriteLine("error");
-            }
-            else
-            {
-                Console.WriteLine("non error");
-
+                    sqlconn.AccessToken = GetAccessToken();
             }
         }
     }

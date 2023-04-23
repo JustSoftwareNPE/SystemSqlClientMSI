@@ -11,6 +11,7 @@ If you use it, I hope you will keep a reference to me and my company.
 We are a small startup focusing on Azure and SaaS solutions for making life easier and allowing IT administrators to focus on end-user value.
 
 ## Using it
-Copy the .cs file to your project, replace TenantId in the code and ensure to call the Patch method as early as possible in your startup (before any db connections are made)
+
+Add the HarmonyLib nuget package and copy the .cs file to your project, replace TenantId in the code and ensure to call the Patch method as early as possible in your startup (before any db connections are made)
 
 
